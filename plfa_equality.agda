@@ -156,15 +156,28 @@ module ≤-Reasoning where
 
 open ≤-Reasoning
 
+{-# BUILTIN EQUALITY _≡_ #-}
+
+≡-implies-≤ : ∀ {x y : ℕ}
+  → x ≡ y
+  ---------
+  → x ≤ y
+
+≡-implies-≤ x≡y rewrite x≡y = ≤-refl
+
 +-mono¹-≤ : ∀ (m p q : ℕ)
-          → p ≤ q
-          --------
-          → m + p ≤ m + q
+  → p ≤ q
+  --------
+  → m + p ≤ m + q
 
 +-mono¹-≤ zero p q p≤q =
   beginL
     zero + p
+  ≤⟨⟩
+    p
   ≤⟨ p≤q ⟩
+    q
+  ≤⟨⟩
     zero + q
   ∎L
 
@@ -177,4 +190,46 @@ open ≤-Reasoning
     suc (m + q)
   ≤⟨⟩
     (suc m) + q
+  ∎L
+
++-mono²-≤ : ∀ (m p q : ℕ)
+  → p ≤ q
+  ---------
+  → p + m ≤ q + m
+
++-mono²-≤ zero p q p≤q =
+  beginL
+    p + zero
+  ≤⟨ ≡-implies-≤ (+-identity p) ⟩
+    p
+  ≤⟨ p≤q ⟩
+    q
+  ≤⟨ ≡-implies-≤ (sym (+-identity q)) ⟩
+    q + zero
+  ∎L
+
++-mono²-≤ (suc m) p q p≤q =
+  beginL
+    p + (suc m)
+  ≤⟨ ≡-implies-≤ (+-suc p m) ⟩
+    suc (p + m)
+  ≤⟨ s≤s (+-mono²-≤ m p q p≤q) ⟩
+    suc (q + m)
+  ≤⟨ ≡-implies-≤ (sym (+-suc q m)) ⟩
+    q + (suc m)
+  ∎L
+
++-mono-≤ : ∀ (m n p q : ℕ)
+  → m ≤ n
+  → p ≤ q
+  ----------
+  → m + p ≤ n + q
+
++-mono-≤ m n p q m≤n p≤q =
+  beginL
+    m + p
+  ≤⟨ +-mono²-≤ p m n m≤n ⟩
+    n + p
+  ≤⟨ +-mono¹-≤ n p q p≤q ⟩
+    n + q
   ∎L
