@@ -233,3 +233,6 @@ open ≤-Reasoning
   ≤⟨ +-mono¹-≤ n p q p≤q ⟩
     n + q
   ∎L
+
+_≐_ : ∀ {A : Set} (x y : A) → Set₁
+_≐_ {A} x y = ∀ (P : A → Set) → P x → P y
