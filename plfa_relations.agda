@@ -4,8 +4,8 @@ import Relation.Binary.PropositionalEquality as Eq
 import plfa_induction
 import plfa_naturals
 
-open plfa_naturals using (ℕ; zero; suc; _+_; _*_; _∸_; Bin; inc; To; From; mul2)
-open plfa_naturals.Bin using (nil; x0_; x1_)
+open plfa_naturals using (ℕ; zero; suc; _+_; _*_; _∸_; Bin;
+                          x0_; x1_; nil; inc; To; From; mul2)
 open plfa_induction using (*-identity; +-identity; +-comm; *-comm; +-suc)
 open Eq using (_≡_; refl; cong)
 
@@ -363,23 +363,42 @@ mul2-x0 : ∀ (n : ℕ)
   → To (mul2 n) ≡ x0 (To n)
 
 mul2-x0 0 ()
-mul2-x0 (suc n) z<n = {!!}
+mul2-x0 (suc zero) z<n = refl
+mul2-x0 (suc n@(suc _)) _ rewrite mul2-x0 n z<s = refl
+
+mul2-pos : ∀ {n : ℕ}
+  → 0 < n
+  ---------------
+  → 0 < mul2 n
+
+mul2-pos {zero} ()
+mul2-pos {suc n} _ = z<s
+
+
+one-pos : ∀ {b : Bin}
+  → One b
+  -------------
+  → 0 < From b
+
+one-pos prim = z<s
+one-pos (ox0 ob) = mul2-pos (one-pos ob)
+one-pos (ox1 ob) = z<s
 
 one-predicate : ∀ (b : Bin)
   → One b
   ------------
   → To (From b) ≡ b
 
-one-predicate nil ob = refl
-one-predicate (x0 b) (ox0 ob) = {!!}
-one-predicate (x1 b) prim     = refl
-one-predicate (x1 b) (ox1 ob) = {!!}
+one-predicate b prim = refl
+one-predicate (x0 b) (ox0 ob) rewrite mul2-x0 (From b) (one-pos ob) | one-predicate b ob = refl
+one-predicate (x1 b) (ox1 ob) rewrite mul2-x0 (From b) (one-pos ob) | one-predicate b ob = refl
 
--- can-reg : ∀ (b : Bin)
---   → Can b
---   -------------
---   → To (From b) ≡ b
 
--- can-reg nil _ = refl
--- can-reg (x0 b) cx0b = {!!}
--- can-reg (x1 b) cx1b = {!!}
+can-predicate : ∀ (b : Bin)
+  → Can b
+  -------------
+  → To (From b) ≡ b
+
+can-predicate nil _ = refl
+can-predicate (x0 b) (one ob) = one-predicate (x0 b) ob
+can-predicate (x1 b) (one ob) = one-predicate (x1 b) ob
