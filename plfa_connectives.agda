@@ -276,7 +276,7 @@ currying =
 ⊎-weak-× ⟨ inj₁ x , z ⟩ = inj₁ x
 ⊎-weak-× ⟨ inj₂ x , z ⟩ = inj₂ ⟨ x , z ⟩
 
--- ⊎-another-× : ∀ {A B C : Set} → A ⊎ (B × C) → (A ⊎ B) × C
+-- ⊎-another-× : ∀ {A B C : Set} → (A ⊎ B) × C → (A × C) ⊎ (B × C)
 -- ⊎-another-×
 
 ⊎×-implies-×⊎ : ∀ {A B C D : Set} → (A × B) ⊎ (C × D) → (A ⊎ C) × (B ⊎ D)
@@ -284,4 +284,4 @@ currying =
 ⊎×-implies-×⊎ (inj₂ C×D) = ⟨ inj₂ (proj₁ C×D) , inj₂ (proj₂ C×D) ⟩
 
 --the converse is false. For instance, in logic terms, one could have A ⊎ B and C ⊎ D simply by having B and C, which can't be used to construct
--- A × C or B × D.
+--A × C or B × D.
