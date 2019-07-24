@@ -1,14 +1,14 @@
-module plfa_isomorphism where
+module plfa.Isomorphism where
 
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; cong; cong-app)
 open Eq.≡-Reasoning
 
-import plfa_naturals
-import plfa_induction
-open plfa_naturals using (ℕ; zero; suc; _+_; _*_; _∸_;
+import plfa.Naturals
+import plfa.Induction
+open plfa.Naturals using (ℕ; zero; suc; _+_; _*_; _∸_;
                          Bin; x0_; x1_; nil; inc; To; From; mul2)
-open plfa_induction using (+-comm; Bin-Law2)
+open plfa.Induction using (+-comm; Bin-Law2)
 
 _∘_ : ∀ {A B C : Set} → (B → C) → (A → B) → (A → C)
 (g ∘ f) x = g (f x)

@@ -1,20 +1,17 @@
--- 𝕋𝕠𝕞𝕒𝕫 𝔾𝕠𝕞𝕖𝕤 𝕄𝕒𝕤𝕔𝕒𝕣𝕖𝕟𝕙𝕒𝕤
-
-
-module plfa_decidable where
+module plfa.Decidable where
 
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl)
 open Eq.≡-Reasoning
-open import plfa_naturals using (ℕ; zero; suc; _∸_)
+open import plfa.Naturals using (ℕ; zero; suc; _∸_)
 open import Data.Product using (_×_) renaming (_,_ to ⟨_,_⟩)
 open import Data.Empty using (⊥; ⊥-elim)
-open import plfa_negation using (¬_; ¬¬-intro; contraposition)
-open import plfa_connectives using (_⊎_; inj₁; inj₂;
+open import plfa.Negation using (¬_; ¬¬-intro; contraposition)
+open import plfa.Connectives using (_⊎_; inj₁; inj₂;
                                     ⊤; tt)
-open import plfa_relations using (_≤_; z≤n; s≤s;
+open import plfa.Relations using (_≤_; z≤n; s≤s;
                                   _<_; z<s; s<s)
-open import plfa_isomorphism using (_⇔_; _∘_)
+open import plfa.Isomorphism using (_⇔_; _∘_)
 
 data Bool : Set where
   true  : Bool

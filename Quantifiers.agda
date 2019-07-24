@@ -1,16 +1,16 @@
-module plfa_quantifiers where
+module plfa.Quantifiers where
 
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; cong; trans; sym)
 open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
-open import plfa_naturals using (ℕ; zero; suc; _+_; _*_;
+open import plfa.Naturals using (ℕ; zero; suc; _+_; _*_;
                                  To; From; x0_; x1_; nil; Bin)
-open import plfa_negation using (¬_)
+open import plfa.Negation using (¬_)
 open import Data.Product using (_×_; proj₁; proj₂) renaming (_,_ to ⟨_,_⟩)
-open import plfa_connectives using (_⊎_; inj₁; inj₂)
-open import plfa_isomorphism using (_≃_; extensionality)
-open import plfa_induction using (Bin-Law2; +-assoc; +-comm; +-identity; +-suc)
-open import plfa_relations using (_≤_; s≤s; z≤n;
+open import plfa.Connectives using (_⊎_; inj₁; inj₂)
+open import plfa.Isomorphism using (_≃_; extensionality)
+open import plfa.Induction using (Bin-Law2; +-assoc; +-comm; +-identity; +-suc)
+open import plfa.Relations using (_≤_; s≤s; z≤n;
                                   even; odd; e-zero; e-suc; o-suc;
                                   One; prim; ox0; ox1;
                                   Can; one; can-predicate; can-to; ≤-refl)

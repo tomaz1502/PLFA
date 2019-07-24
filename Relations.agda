@@ -1,12 +1,12 @@
-module plfa_relations where
+module plfa.Relations where
 
 import Relation.Binary.PropositionalEquality as Eq
-import plfa_induction
-import plfa_naturals
+import plfa.Induction
+import plfa.Naturals
 
-open plfa_naturals using (ℕ; zero; suc; _+_; _*_; _∸_; Bin;
+open plfa.Naturals using (ℕ; zero; suc; _+_; _*_; _∸_; Bin;
                           x0_; x1_; nil; inc; To; From; mul2)
-open plfa_induction using (*-identity; +-identity; +-comm; *-comm; +-suc)
+open plfa.Induction using (*-identityʳ; +-identity; +-comm; *-comm; +-suc)
 open Eq using (_≡_; refl; cong)
 
 

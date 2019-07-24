@@ -1,10 +1,10 @@
-module plfa_induction where
+module plfa.Induction where
 
 import Relation.Binary.PropositionalEquality as Eq
-import plfa_naturals
+import plfa.Naturals
 
-open plfa_naturals using (ℕ; zero; suc; _+_; _*_; _∸_; Bin; inc; From; To)
-open plfa_naturals.Bin using (nil; x0_; x1_)
+open plfa.Naturals using (ℕ; zero; suc; _+_; _*_; _∸_; Bin; inc; From; To)
+open plfa.Naturals.Bin using (nil; x0_; x1_)
 open Eq using (_≡_; refl; cong; sym)
 open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
 
@@ -40,6 +40,9 @@ open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
     suc (m' + zero)
   ≡⟨ cong suc (+-identity m')⟩
     suc m' ∎
+
++-identityˡ : ∀ (n : ℕ) → zero + n ≡ n
++-identityˡ n = refl
 
 +-suc : ∀ (m n : ℕ) → m + suc n ≡ suc (m + n)
 +-suc zero n =
@@ -90,16 +93,12 @@ open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
 +-assoc' zero n p = refl
 +-assoc' (suc m) n p rewrite +-assoc' m n p = refl
 
-+-identity' : ∀ (n : ℕ) → n + zero ≡ n
-+-identity' zero = refl
-+-identity' (suc n) rewrite +-identity' n = refl
-
 +-suc' : ∀ (m n : ℕ) → m + suc n ≡ suc (m + n)
 +-suc' zero n = refl
 +-suc' (suc m) n rewrite +-suc' m n = refl
 
 +-comm' : ∀ (m n : ℕ) → m + n ≡ n + m
-+-comm' m zero rewrite +-identity' m = refl
++-comm' m zero rewrite +-identity m = refl
 +-comm' m (suc n) rewrite +-suc' m n | +-comm m n = refl
 
 +-assoc'' : ∀ (m n p : ℕ) → m + (n + p) ≡ (m + n) + p
@@ -149,3 +148,35 @@ Bin-Law2 (suc n) rewrite Bin-Law1 (To n) | Bin-Law2 n = refl
 
 
 -- From (inc (x1 b)) = From (x0 (inc b)) = From (inc b) + From (inc b) = suc (From b) + suc (From b) = suc (From (x1 b))
+
+*-identityˡ : ∀ (n : ℕ) → 1 * n ≡ n
+*-identityˡ zero    = refl
+*-identityˡ (suc n) = cong suc (*-identityˡ n)
+
+*-assoc : ∀ (m n p : ℕ) → (m * n) * p ≡ m * (n * p)
+*-assoc zero n p =
+  begin
+    (zero * n) * p
+  ≡⟨⟩
+    zero * p
+  ≡⟨⟩
+    zero
+  ≡⟨⟩
+    zero * (n * p)
+  ∎
+*-assoc (suc m) n p =
+  begin
+    (suc m * n) * p
+  ≡⟨⟩
+    (n + m * n) * p
+  ≡⟨ *-distr-+ n (m * n) p ⟩
+    n * p + (m * n) * p
+  ≡⟨ cong (n * p +_) (*-assoc m n p) ⟩
+    n * p + m * (n * p)
+  ≡⟨⟩
+    suc m * (n * p)
+  ∎
+
+*-identityʳ : ∀ (n : ℕ) → n * 1 ≡ n
+*-identityʳ zero    = refl
+*-identityʳ (suc n) = cong suc (*-identityʳ n)

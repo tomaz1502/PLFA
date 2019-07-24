@@ -1,11 +1,11 @@
-module plfa_connectives where
+module plfa.Connectives where
 
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl)
 open Eq.≡-Reasoning
-open import plfa_naturals using (ℕ)
-open import plfa_isomorphism using (_∘_; _≃_; _≲_; extensionality; _⇔_)
-open plfa_isomorphism.≃-Reasoning
+open import plfa.Naturals using (ℕ)
+open import plfa.Isomorphism using (_∘_; _≃_; _≲_; extensionality; _⇔_)
+open plfa.Isomorphism.≃-Reasoning
 
 data _×_ (A B : Set) : Set where
 
