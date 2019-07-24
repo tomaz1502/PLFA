@@ -770,6 +770,15 @@ All-∀-from-to P []       []         = refl
 All-∀-from-to P (x ∷ xs) (Px ∷ Pxs) = cong (Px ∷_) (All-∀-from-to P xs Pxs)
 
 -- <Stolen from Maurício>
+cong-app2 : ∀ {A : Set} {B : A → Set} {C : A → Set} {f g : {x : A} → B x → C x}
+            -- Agda tries to eagerly compute the value for the implicit argument
+            -- for f. (λ {x} → f {x}) means "keep {x} as a variable". This will
+            -- appear below.
+  → (λ {x} → f {x}) ≡ (λ {x} → g {x})
+  -------------------------------------
+  → ∀ {x} (y : B x) → (f {x} y ≡ g {x} y)
+cong-app2 refl x = refl
+
 postulate
   extensionality2 : ∀ {A : Set} {B : A → Set} {C : A → Set} {f g : {x : A} → B x → C x}
     → (∀ {x : A} (bx : B x) → f {x} bx ≡ g {x} bx)
@@ -781,7 +790,7 @@ All-∀-to-from : ∀ {A : Set} (P : A → Set) (xs : List A) (Pxs : ∀ {x} →
   (λ {x} → All-∀-to P xs (All-∀-from P xs Pxs) {x}) ≡ (λ {x} → Pxs {x})
 
 All-∀-to-from P []       Pxs = extensionality2 λ()
-All-∀-to-from P (x ∷ xs) Pxs = extensionality2 λ { (here refl) → refl ; (there ys≡) → ? }
+All-∀-to-from P (x ∷ xs) Pxs = extensionality2 λ { (here refl) → refl ; (there ys≡) → cong-app2 (All-∀-to-from P xs (λ x∈xs → Pxs (there x∈xs))) ys≡ }
 
 All-∀ : ∀ {A : Set} (P : A → Set) (xs : List A) →
   All P xs ≃ ∀ {x} → x ∈ xs → P x
