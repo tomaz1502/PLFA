@@ -1,19 +1,19 @@
-module Lists where
+module plfa.part_one.Lists where
 
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; sym; trans; cong)
 open Eq.≡-Reasoning
-open import Decidable using (Bool; true; false; T; _∧_; _∨_; not; Dec; yes; no)
-open import Naturals using (ℕ; zero; suc; _+_; _*_; _∸_)
-open import Relations using (_≤_; s≤s; z≤n)
-open import InductionT using (+-assoc; *-identityˡ; *-identityʳ; +-identity; *-assoc; *-comm; *-distr-+; +-comm; *-suc; +-suc; +-identityˡ)
-open import Negation using (¬_)
-open import Connectives using (_⊎_; inj₁; inj₂)
+open import plfa.part_one.Decidable using (Bool; true; false; T; _∧_; _∨_; not; Dec; yes; no)
+open import plfa.part_one.Naturals using (ℕ; zero; suc; _+_; _*_; _∸_)
+open import plfa.part_one.Relations using (_≤_; s≤s; z≤n)
+open import plfa.part_one.InductionT using (+-assoc; *-identityˡ; *-identityʳ; +-identity; *-assoc; *-comm; *-distr-+; +-comm; *-suc; +-suc; +-identityˡ)
+open import plfa.part_one.Negation using (¬_)
+open import plfa.part_one.Connectives using (_⊎_; inj₁; inj₂)
 open import Data.Product using (_×_; ∃; ∃-syntax; proj₁; proj₂) renaming (_,_ to ⟨_,_⟩)
 open import Data.Empty using (⊥-elim)
 open import Function using (_∘_)
 open import Level using (Level)
-open import Isomorphism using (_≃_; _⇔_; extensionality)
+open import plfa.part_one.Isomorphism using (_≃_; _⇔_; extensionality)
 
 data List (A : Set) : Set where
  [] : List A

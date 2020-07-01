@@ -1,10 +1,10 @@
-module InductionT where
+module plfa.part_one.InductionT where
 
 import Relation.Binary.PropositionalEquality as Eq
-import Naturals
+import plfa.part_one.Naturals
 
-open Naturals using (ℕ; zero; suc; _+_; _*_; _∸_; Bin; inc; From; To)
-open Naturals.Bin using (nil; x0_; x1_)
+open plfa.part_one.Naturals using (ℕ; zero; suc; _+_; _*_; _∸_; Bin; inc; From; To)
+open plfa.part_one.Naturals.Bin using (nil; x0_; x1_)
 open Eq using (_≡_; refl; cong; sym)
 open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
 

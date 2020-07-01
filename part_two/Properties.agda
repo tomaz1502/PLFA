@@ -1,7 +1,7 @@
-module Properties where
+module plfa.part_two.Properties where
 
-open import Lambda
-open import Isomorphism
+open import plfa.part_two.Lambda
+open import plfa.part_one.Isomorphism
 
 open import Relation.Binary.PropositionalEquality using (_≡_; _≢_; refl; sym; cong; cong₂)
 open import Data.String using (String; _≟_)

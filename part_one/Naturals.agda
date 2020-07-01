@@ -1,4 +1,4 @@
-module Naturals where
+module plfa.part_one.Naturals where
 
 data ℕ : Set where
   zero : ℕ

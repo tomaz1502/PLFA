@@ -1,6 +1,6 @@
 {-# OPTIONS --allow-unsolved-metas #-}
 
-module Lambda where
+module plfa.part_two.Lambda where
 
 open import Relation.Binary.PropositionalEquality using (_≡_; _≢_; refl; cong)
 open import Data.String using (String; _≟_)
@@ -10,7 +10,7 @@ open import Relation.Nullary using (Dec; yes; no; ¬_)
 open import Data.List using (List; _∷_; [])
 open import Data.Product using (_×_; proj₁; proj₂; ∃; ∃-syntax)
                                 renaming (_,_ to ⟨_,_⟩)
-open import Isomorphism
+open import plfa.part_one.Isomorphism
 
 Id : Set
 Id = String

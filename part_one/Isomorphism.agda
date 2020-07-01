@@ -1,4 +1,4 @@
-module Isomorphism where
+module plfa.part_one.Isomorphism where
 
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; cong; cong-app)
@@ -11,7 +11,7 @@ _∘'_ : ∀ {A B C : Set} → (B → C) → (A → B) → (A → C)
 g ∘' f = λ x → g (f x)
 
 postulate
-  extensionality : ∀ {A B : Set} {f g : A → B}
+  extensionality : ∀ {A : Set} {B : A → Set} {f g : (x : A) → B x}
     → (∀ (x : A) → f x ≡ g x)
     ---------------------------
     → f ≡ g

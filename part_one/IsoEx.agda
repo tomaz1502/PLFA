@@ -1,19 +1,19 @@
 -- Exercises from Isomorphism module
 -- Separated to eliminate conflicts with ℕ module
 
-module IsoEx where
+module plfa.part_one.IsoEx where
 
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; cong; cong-app)
 open Eq.≡-Reasoning
 
-import Naturals
-import InductionT
-open Naturals using (ℕ; zero; suc; _+_; _*_; _∸_;
+import plfa.part_one.Naturals
+import plfa.part_one.InductionT
+open plfa.part_one.Naturals using (ℕ; zero; suc; _+_; _*_; _∸_;
                      Bin; x0_; x1_; nil; inc; To; From; mul2)
-open InductionT using (+-comm; Bin-Law2)
+open plfa.part_one.InductionT using (+-comm; Bin-Law2)
 
-open import Isomorphism
+open import plfa.part_one.Isomorphism
 
 
 _+'_ : ℕ → ℕ → ℕ

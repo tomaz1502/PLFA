@@ -1,15 +1,15 @@
-module Negation where
+module plfa.part_one.Negation where
 
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; sym; cong)
 open Eq.≡-Reasoning
-open import Naturals using (ℕ; zero; suc; _∸_)
-open import Relations using (_<_; z<s; s<s; _>_)
+open import plfa.part_one.Naturals using (ℕ; zero; suc; _∸_)
+open import plfa.part_one.Relations using (_<_; z<s; s<s; _>_)
 open import Data.Empty using (⊥; ⊥-elim)
-open import Connectives using (_×_; ⟨_,_⟩; proj₁; proj₂; _⊎_; inj₁; inj₂; →-distrib-⊎)
+open import plfa.part_one.Connectives using (_×_; ⟨_,_⟩; proj₁; proj₂; _⊎_; inj₁; inj₂; →-distrib-⊎)
 open import Function using (_∘_)
-open import Isomorphism using (_≃_; extensionality; ≃-refl; _≲_)
-open Isomorphism.≃-Reasoning
+open import plfa.part_one.Isomorphism using (_≃_; extensionality; ≃-refl; _≲_)
+open plfa.part_one.Isomorphism.≃-Reasoning
 
 ¬_ : Set → Set
 ¬ A = A → ⊥
