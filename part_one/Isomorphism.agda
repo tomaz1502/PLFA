@@ -1,14 +1,8 @@
-module plfa.Isomorphism where
+module Isomorphism where
 
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; cong; cong-app)
 open Eq.≡-Reasoning
-
-import plfa.Naturals
-import plfa.Induction
-open plfa.Naturals using (ℕ; zero; suc; _+_; _*_; _∸_;
-                         Bin; x0_; x1_; nil; inc; To; From; mul2)
-open plfa.Induction using (+-comm; Bin-Law2)
 
 _∘_ : ∀ {A B C : Set} → (B → C) → (A → B) → (A → C)
 (g ∘ f) x = g (f x)
@@ -21,20 +15,6 @@ postulate
     → (∀ (x : A) → f x ≡ g x)
     ---------------------------
     → f ≡ g
-
-_+'_ : ℕ → ℕ → ℕ
-m +' zero = m
-m +' (suc n) = suc (m +' n)
-
-same-app : ∀ (m n : ℕ) → m +' n ≡ m + n
-same-app m n rewrite +-comm m n = helper m n
-  where
-    helper : ∀ (m n : ℕ) → m +' n ≡ n + m
-    helper m zero = refl
-    helper m (suc n) = cong suc (helper m n)
-
-same : _+'_ ≡ _+_
-same = extensionality (λ x → extensionality (λ y → same-app x y))
 
 infix 0 _≃_
 record _≃_ (A B : Set) : Set where
@@ -267,10 +247,3 @@ open _⇔_
   ; from = from A⇔B ∘ from B⇔C
   }
 
-Bin-embedding : ℕ ≲ Bin
-Bin-embedding =
-  record
-  { to   = To
-  ; from = From
-  ; from∘to = λ {n → Bin-Law2 n}
-  }

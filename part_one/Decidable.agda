@@ -1,17 +1,17 @@
-module plfa.Decidable where
+module Decidable where
 
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl)
 open Eq.≡-Reasoning
-open import plfa.Naturals using (ℕ; zero; suc; _∸_)
+open import Naturals using (ℕ; zero; suc; _∸_)
 open import Data.Product using (_×_) renaming (_,_ to ⟨_,_⟩)
 open import Data.Empty using (⊥; ⊥-elim)
-open import plfa.Negation using (¬_; ¬¬-intro; contraposition)
-open import plfa.Connectives using (_⊎_; inj₁; inj₂;
+open import Negation using (¬_; ¬¬-intro; contraposition)
+open import Connectives using (_⊎_; inj₁; inj₂;
                                     ⊤; tt)
-open import plfa.Relations using (_≤_; z≤n; s≤s;
+open import Relations using (_≤_; z≤n; s≤s;
                                   _<_; z<s; s<s)
-open import plfa.Isomorphism using (_⇔_; _∘_)
+open import Isomorphism using (_⇔_; _∘_)
 
 data Bool : Set where
   true  : Bool

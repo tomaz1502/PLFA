@@ -1,4 +1,4 @@
-module plfa.Naturals where
+module Naturals where
 
 data ℕ : Set where
   zero : ℕ
@@ -147,4 +147,3 @@ _ =
     ≡⟨⟩ From (x1 nil) + From (x1 nil) + From (x1 nil) + From (x1 nil)
     ≡⟨⟩ 1 + From (x0 nil) + 1 + From (x0 nil) + 1 + From (x0 nil) + 1 + From (x0 nil)
     ≡⟨⟩ 4 ∎
-

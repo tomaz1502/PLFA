@@ -1,3 +1,5 @@
+{-# OPTIONS --allow-unsolved-metas #-}
+
 module Lambda where
 
 open import Relation.Binary.PropositionalEquality using (_≡_; _≢_; refl; cong)
@@ -6,7 +8,9 @@ open import Data.Nat using (ℕ; zero; suc)
 open import Data.Empty using (⊥; ⊥-elim)
 open import Relation.Nullary using (Dec; yes; no; ¬_)
 open import Data.List using (List; _∷_; [])
--- open import Isomorphism using (_≲_)  hiding (Naturals; InductionT; Eq)
+open import Data.Product using (_×_; proj₁; proj₂; ∃; ∃-syntax)
+                                renaming (_,_ to ⟨_,_⟩)
+open import Isomorphism
 
 Id : Set
 Id = String
@@ -234,7 +238,6 @@ data _—→_ : Term → Term → Set where
     → μ x ⇒ M —→ M [ x := μ x ⇒ M ]
 
 
-
 QuizUm : (ƛ "x" ⇒ ` "x") · (ƛ "x" ⇒ ` "x")  —→ (ƛ "x" ⇒ ` "x")
 QuizUm = β-ƛ V-ƛ
 
@@ -283,14 +286,6 @@ data _—↠´_ : Term → Term → Set where
     -------------
     → L —↠´ N
 
-
-infix 0 _≲_
-record _≲_ (A B : Set) : Set where
-  field
-    to      : A → B
-    from    : B → A
-    from∘to : ∀ (x : A) → from (to x) ≡ x
-
 to∘emb—↠ : ∀ {M N} → M —↠ N → M —↠´ N
 to∘emb—↠ (M ∎) = _—↠´_.refl´
 to∘emb—↠ {M} {N} (L —→⟨ L—→M ⟩ M—↠N) = trans´ (step´ L—→M) (to∘emb—↠ M—↠N)
@@ -323,64 +318,8 @@ _ =
     `suc (`suc `zero)
     ∎
 
-_ : plus · two · two —↠ `suc `suc `suc `suc `zero
-_ =
-  begin
-    plus · two · two
-  —→⟨ ξ-·₁ (ξ-·₁ β-μ) ⟩
-    (ƛ "m" ⇒ ƛ "n" ⇒
-      case ` "m" [zero⇒ ` "n" |suc "m" ⇒ `suc (plus · ` "m" · ` "n") ])
-        · two · two
-  —→⟨ ξ-·₁ (β-ƛ (V-suc (V-suc V-zero))) ⟩
-    (ƛ "n" ⇒
-      case two [zero⇒ ` "n" |suc "m" ⇒ `suc (plus · ` "m" · ` "n") ])
-         · two
-  —→⟨ β-ƛ (V-suc (V-suc V-zero)) ⟩
-    case two [zero⇒ two |suc "m" ⇒ `suc (plus · ` "m" · two) ]
-  —→⟨ β-suc (V-suc V-zero) ⟩
-    `suc (plus · `suc `zero · two)
-  —→⟨ ξ-suc (ξ-·₁ (ξ-·₁ β-μ)) ⟩
-    `suc ((ƛ "m" ⇒ ƛ "n" ⇒
-      case ` "m" [zero⇒ ` "n" |suc "m" ⇒ `suc (plus · ` "m" · ` "n") ])
-        · `suc `zero · two)
-  —→⟨ ξ-suc (ξ-·₁ (β-ƛ (V-suc V-zero))) ⟩
-    `suc ((ƛ "n" ⇒
-      case `suc `zero [zero⇒ ` "n" |suc "m" ⇒ `suc (plus · ` "m" · ` "n") ])
-        · two)
-  —→⟨ ξ-suc (β-ƛ (V-suc (V-suc V-zero))) ⟩
-    `suc (case `suc `zero [zero⇒ two |suc "m" ⇒ `suc (plus · ` "m" · two) ])
-  —→⟨ ξ-suc (β-suc V-zero) ⟩
-    `suc `suc (plus · `zero · two)
-  —→⟨ ξ-suc (ξ-suc (ξ-·₁ (ξ-·₁ β-μ))) ⟩
-    `suc `suc ((ƛ "m" ⇒ ƛ "n" ⇒
-      case ` "m" [zero⇒ ` "n" |suc "m" ⇒ `suc (plus · ` "m" · ` "n") ])
-        · `zero · two)
-  —→⟨ ξ-suc (ξ-suc (ξ-·₁ (β-ƛ V-zero))) ⟩
-    `suc `suc ((ƛ "n" ⇒
-      case `zero [zero⇒ ` "n" |suc "m" ⇒ `suc (plus · ` "m" · ` "n") ])
-        · two)
-  —→⟨ ξ-suc (ξ-suc (β-ƛ (V-suc (V-suc V-zero)))) ⟩
-    `suc `suc (case `zero [zero⇒ two |suc "m" ⇒ `suc (plus · ` "m" · two) ])
-  —→⟨ ξ-suc (ξ-suc β-zero) ⟩
-    `suc (`suc (`suc (`suc `zero)))
-  ∎
-
-_ : plusᶜ · twoᶜ · twoᶜ · sucᶜ · `zero —↠ `suc `suc `suc `suc `zero
-_ =
-  begin
-    (ƛ "m" ⇒ ƛ "n" ⇒ ƛ "s" ⇒ ƛ "z" ⇒ ` "m" · ` "s" · (` "n" · ` "s" · ` "z"))
-      · twoᶜ · twoᶜ · sucᶜ · `zero
-  —→⟨ ξ-·₁ (ξ-·₁ (ξ-·₁ (β-ƛ V-ƛ))) ⟩
-    (ƛ "n" ⇒ ƛ "s" ⇒ ƛ "z" ⇒ twoᶜ · ` "s" · (` "n" · ` "s" · ` "z"))
-      · twoᶜ · sucᶜ · `zero
-  —→⟨ ξ-·₁ (ξ-·₁ (β-ƛ V-ƛ)) ⟩
-    (ƛ "s" ⇒ ƛ "z" ⇒ twoᶜ · ` "s" · (twoᶜ · ` "s" · ` "z")) · sucᶜ · `zero
-  —→⟨ ξ-·₁ (β-ƛ V-ƛ) ⟩
-    (ƛ "z" ⇒ twoᶜ · sucᶜ · (twoᶜ · sucᶜ · ` "z")) · `zero
-  —→⟨ β-ƛ V-zero ⟩
-    twoᶜ · sucᶜ · (twoᶜ · sucᶜ · `zero)
-  —→⟨ ξ-·₁ (β-ƛ V-ƛ) ⟩
-    (ƛ "z" ⇒ sucᶜ · (sucᶜ · ` "z")) · (twoᶜ · sucᶜ · `zero)
+_ : (ƛ "z" ⇒ sucᶜ · (sucᶜ · ` "z")) · (twoᶜ · sucᶜ · `zero) —↠ `suc (`suc (`suc (`suc `zero)))
+_ = (ƛ "z" ⇒ sucᶜ · (sucᶜ · ` "z")) · (twoᶜ · sucᶜ · `zero)
   —→⟨ ξ-·₂ V-ƛ (ξ-·₁ (β-ƛ V-ƛ)) ⟩
     (ƛ "z" ⇒ sucᶜ · (sucᶜ · ` "z")) · ((ƛ "z" ⇒ sucᶜ · (sucᶜ · ` "z")) · `zero)
   —→⟨ ξ-·₂ V-ƛ (β-ƛ V-zero) ⟩
@@ -436,25 +375,6 @@ data Context : Set where
   ∅     : Context
   _,_∶_ : Context → Id → Type → Context
 
-infix 0 _≃_
-record _≃_ (A B : Set) : Set where
-  field
-    to      : A → B
-    from    : B → A
-    from∘to : ∀ (x : A) → from (to x) ≡ x
-    to∘from : ∀ (y : B) → to (from y) ≡ y
-
-open _≃_
-
-data _×_ (A B : Set) : Set where
-
-  ⟨_,_⟩ :
-    A
-    → B
-    --------
-    → A × B
-
-
 to₁ : Context → List (Id × Type)
 to₁ ∅ = []
 to₁ (C , x ∶ T) = ⟨ x ,  T ⟩ ∷ (to₁ C)
@@ -505,7 +425,7 @@ data _⊢_∶_ : Context → Term → Type → Set where
     → Γ , x ∶ T ⊢ N ∶ U
     -------------------------
     → Γ ⊢ ƛ x ⇒ N ∶ T ⇒ U
-    
+
   _·_ : ∀ {Γ N M T U}
     → Γ ⊢ M ∶ T ⇒ U
     → Γ ⊢ N ∶ T
@@ -614,8 +534,10 @@ mul = μ "×" ⇒ ƛ "m" ⇒ ƛ "n" ⇒
 
 -}
 
+{- TO FIX
 mulWT : ∅ ⊢ mul ∶ `ℕ ⇒ `ℕ ⇒ `ℕ
-mulWT = ⊢μ (⊢ƛ (⊢ƛ (⊢case (⊢´ (S (λ()) Z)) ⊢zero (⊢plus · (⊢´ (S (λ()) (S (λ()) (S (λ()) Z))) · ⊢´ Z · ⊢´ (S (λ()) Z)) · ⊢´ (S (λ()) Z)))))
+mulWT = ⊢μ (⊢ƛ (⊢ƛ (⊢case (⊢´ (S (λ()) Z)) ⊢zero (⊢plus · (⊢´ (S (λ())) (S (λ()) (S (λ()) Z))) · ⊢´ Z · ⊢´ (S (λ()) Z)) · ⊢´ (S (λ()) Z))))
+-}
 
 {-
 mulᶜ : Term
@@ -624,5 +546,13 @@ mulᶜ = ƛ "m" ⇒ ƛ "n" ⇒ ƛ "s" ⇒ ƛ "z" ⇒
 -}
 
 
-mulᶜWT : ∀ {A B C D E} → ∅ ⊢ mulᶜ ∶ A ⇒ B ⇒ C ⇒ D ⇒ E
-mulᶜWT = ⊢ƛ (⊢ƛ (⊢ƛ (⊢ƛ {!!})))
+mulᶜWT : ∀ {T₁ T₂ T₃ T₄} → ∅ ⊢ mulᶜ ∶ (T₁ ⇒ T₂ ⇒ T₃) ⇒ (T₄ ⇒ T₁) ⇒ T₄ ⇒ T₂ ⇒ T₃
+mulᶜWT = ⊢ƛ (⊢ƛ (⊢ƛ (⊢ƛ (⊢´ (S (λ()) (S (λ()) (S (λ()) Z))) · (⊢´ (S (λ()) (S (λ()) Z)) · ⊢´ (S (λ()) Z)) · ⊢´ Z))))
+
+
+
+-- n-th : {A : Id} {B : Type} (C : Context) → ℕ → C ∋ A ∶ B → A ∶ B
+-- n-th ∅ zero = {!!}
+-- n-th {x} {x₁} (C , x ∶ x₁) zero = {!Z!}
+-- n-th C (suc n) = {!!}
+
