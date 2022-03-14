@@ -301,7 +301,7 @@ from∘emb—↠ (trans´ {L} {M} {N} L—↠´M M—↠´N) = ↠-trans (from�
 
 from∘to—↠ : ∀ {M N} (p : M —↠ N) → from∘emb—↠ (to∘emb—↠ p) ≡ p
 from∘to—↠ {M} {.M} (.M ∎) = refl
-from∘to—↠ {M} {N} (.M —→⟨ x ⟩ p) = cong (λ z → M —→⟨ x ⟩ z) (from∘to—↠ p)
+from∘to—↠ {M} {N} (.M —→⟨ x ⟩ p) = cong (M —→⟨ x ⟩_) (from∘to—↠ p)
 
 emb—↠ : ∀ {M N} → M —↠ N ≲ M —↠´ N
 emb—↠ =
@@ -310,6 +310,8 @@ emb—↠ =
   ; from    = from∘emb—↠
   ; from∘to = from∘to—↠
   }
+
+-- why cant we prove it the other way around?
 
 _ : twoᶜ · sucᶜ · `zero —↠ `suc `suc `zero
 _ =
