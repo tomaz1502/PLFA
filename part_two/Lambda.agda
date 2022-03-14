@@ -166,6 +166,7 @@ subsDec : Term → Id → Term → Term
 case N [zero⇒ M |suc x ⇒ L ] [ y ::= V ] = subsDec (case N [zero⇒ M |suc x ⇒ L ]) y V
 (μ x ⇒ N) [ y ::= V ] = subsDec (μ x ⇒ N) y V
 
+
 subsDec (ƛ x ⇒ T) y V with x ≟ y
 ... | yes _ = ƛ x ⇒ T
 ... | no  _ = ƛ x ⇒ T [ y ::= V ]
@@ -268,6 +269,9 @@ data _—↠_ : Term → Term → Set where
 begin_ : ∀ {M N} → M —↠ N → M —↠ N
 begin M—↠N = M—↠N
 
+↠-trans : ∀ {L M N} → L —↠ M → M —↠ N → L —↠ N
+↠-trans (_ ∎) L—↠N = L—↠N
+↠-trans (_ —→⟨ L—→M ⟩ M—↠M₁) M₁—↠N = _ —→⟨ L—→M ⟩ ↠-trans M—↠M₁ M₁—↠N
 
 data _—↠´_ : Term → Term → Set where
 
@@ -293,16 +297,19 @@ to∘emb—↠ {M} {N} (L —→⟨ L—→M ⟩ M—↠N) = trans´ (step´ L�
 from∘emb—↠ : ∀ {M N} → M —↠´ N → M —↠ N
 from∘emb—↠ {M} {N} (step´ M—→N)             = M —→⟨ M—→N ⟩ N ∎
 from∘emb—↠ {M} refl´                        = M ∎
-from∘emb—↠ (trans´ {L} {M} {N} L—↠´M M—↠´N) = L —→⟨ {!from∘emb—↠ L—↠´M!} ⟩ from∘emb—↠ M—↠´N
+from∘emb—↠ (trans´ {L} {M} {N} L—↠´M M—↠´N) = ↠-trans (from∘emb—↠ L—↠´M) (from∘emb—↠ M—↠´N)
+
+from∘to—↠ : ∀ {M N} (p : M —↠ N) → from∘emb—↠ (to∘emb—↠ p) ≡ p
+from∘to—↠ {M} {.M} (.M ∎) = refl
+from∘to—↠ {M} {N} (.M —→⟨ x ⟩ p) = cong (λ z → M —→⟨ x ⟩ z) (from∘to—↠ p)
 
 emb—↠ : ∀ {M N} → M —↠ N ≲ M —↠´ N
 emb—↠ =
   record
   { to      = to∘emb—↠
   ; from    = from∘emb—↠
-  ; from∘to = {!!}
+  ; from∘to = from∘to—↠
   }
-
 
 _ : twoᶜ · sucᶜ · `zero —↠ `suc `suc `zero
 _ =
